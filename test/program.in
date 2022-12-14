@@ -8,7 +8,7 @@ if(x>1)
 z=2*4
 if(2==2) 
     { 
-        2+2  
+        2+2
     }
 x=2*y
 while (x+2<y)
@@ -28,5 +28,28 @@ if(x<y)
             {
                 5
             }
+    }
+for(x to y)
+    {
+        z=z*2
+    }
+x=2
+switch(x) 
+    {
+        case 1: 
+        {
+            x=2
+            break
+        } 
+        case 2: 
+        {
+            y=2
+            break
+        }
+        case 3:
+        {
+            z=2
+            break
+        }
     }
 end

@@ -1,36 +1,32 @@
 %{
   import java.io.*;
-  import java.util.Collection;
-  import java.util.List;
 %}
 
 %token BEGIN
 %token END
       
 %token CONSTANT
-
 %token ID
 
 %token WHILE
 %token IF
-%token SWITCH_CASE
+%token SWITCH
+%token CASE
+%token FOR
+%token TO
+%token BREAK
+%token OP_ADD_SUB;
+%token OP_MUL_DIV;
+%token EQUAL;
+%token DISTINCT;
 
 
 %%
 
 program
   : // Programa vacio
-  | begin_statement statement_list end_statement
+  | BEGIN statement_list END
   ;
-
-begin_statement
-  : BEGIN
-  ;
-
-end_statement
-  : END
-  ;
-
 
 statement_list
   : // Sentencia vacia
@@ -39,47 +35,59 @@ statement_list
   ;
 
 statement
-  : expression
-  | assignment_statement
-  | while_statement
-  | if_statement
-  | switch_case
+  : assignment
+  | expression
+  | while
+  | if
+  | switch
+  | for
   ;
 
-assignment_statement
-  : ID '=' expression
+assignment
+  : ID EQUAL expression
   ;
 
-while_statement
+while
   : WHILE '(' condition ')' '{' statement_list '}'
   ;
 
-if_statement
+if
   : IF '(' condition ')' '{' statement_list '}'
   ;
 
-condition
-  : expression '=''=' expression
-  | expression '>''=' expression
-  | expression '<''=' expression
-  | expression '>' expression
-  | expression '<' expression
-  | expression '!''=' expression
+switch
+  : SWITCH '(' operator ')' '{' case_list '}'
   ;
 
-switch_case
-  : statement
+case_list
+  : case
+  | case_list case
+  ;
+
+case
+  : CASE CONSTANT ':' '{' statement_list BREAK '}'
+  ;
+
+for
+  : FOR '(' operator TO operator ')' '{' statement_list '}'
+  ;
+
+condition
+  : expression EQUAL EQUAL expression
+  | expression '>'EQUAL expression
+  | expression '<'EQUAL expression
+  | expression '>' expression
+  | expression '<' expression
+  | expression DISTINCT expression
   ;
 
 expression
-  : expression '+' term
-  | expression '-' term
+  : expression OP_ADD_SUB term
   | term
   ;
 
 term
-  : term '*' operator
-  | term '/' operator
+  : term OP_MUL_DIV operator
   | operator
   ;
 
@@ -90,21 +98,18 @@ operator
 
 %%
 
-  /** referencia al analizador léxico
-  **/
+  /** Referencia al analizador léxico **/
   private Lexer lexer ;
 
 
-  /** constructor: crea el Interpreteranalizador léxico (lexer)
-  **/
+  /** Constructor: crea el Interpreter-analizador léxico (lexer) **/
   public Parser(Reader r)
   {
      lexer = new Lexer(r, this);
   }
 
-  /** esta función se invoca por el analizador cuando necesita el
-  *** siguiente token del analizador léxico
-  **/
+  /** Esta función se invoca por el analizador cuando necesita el
+  ** siguiente token del analizador léxico **/
   private int yylex ()
   {
     int yyl_return = -1;
@@ -122,15 +127,7 @@ operator
     return yyl_return;
   }
 
-  /** invocada cuando se produce un error
-  **/
-  public void yyerror (String descripcion, int yystate, int token)
+  public void yyerror (String description)
   {
-     System.err.println ("Error en línea "+Integer.toString(lexer.lineaActual())+" : "+descripcion);
-     System.err.println ("Token leído : "+yyname[token]);
-  }
-
-  public void yyerror (String descripcion)
-  {
-     System.err.println ("Error en línea "+Integer.toString(lexer.lineaActual())+" : "+descripcion);
+     System.err.println ("Error en línea "+Integer.toString(lexer.lineaActual())+" : "+description);
   }

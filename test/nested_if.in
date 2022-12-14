@@ -1,0 +1,13 @@
+begin
+x=1
+y=x+1
+z=y*4
+if(x<y)
+    {
+        x=x*2
+        if(x==y)
+        {
+            z=x
+        }
+    }
+end

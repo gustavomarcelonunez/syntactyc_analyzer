@@ -1,0 +1,16 @@
+begin
+x=2*1
+switch(x)
+    {
+        case 1: 
+            {
+                y=x
+                break
+            }
+        case 2:
+            {
+                z=x
+                break
+            }
+    }
+end

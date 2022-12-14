@@ -1,12 +1,6 @@
-// fuente 'jflex' para interprete
-
-
-// CÓDIGO DE USUARIO
 package interprete;
 
-
 %%
-// OPCIONES Y DECLARACIONES
 
 %class Lexer
 %byaccj
@@ -21,8 +15,7 @@ package interprete;
     yyparser = p  ;
   }
 
-  /** devuelve el numero de linea donde está el último caracter leido
-  **/
+  /** Devuelve el numero de linea donde está el último caracter leído **/
 
   public int lineaActual()
   {
@@ -32,34 +25,34 @@ package interprete;
 %}
 
 %%
-// TOKENIZACION
 
 "begin"         { return Parser.BEGIN; }
 "end"           { return Parser.END; }
 "while"         { return Parser.WHILE; }
 "if"            { return Parser.IF; }
-"switch_case"   { return Parser.SWITCH_CASE; }
+"switch"        { return Parser.SWITCH; }
+"for"           { return Parser.FOR; }
+"to"            { return Parser.TO; }
+"case"          { return Parser.CASE; }
+"break"         { return Parser.BREAK; }
+"="             { return Parser.EQUAL; }
+"!="            { return Parser.DISTINCT; }
 
-["xyz"]
-    {
-      return Parser.ID;
-    }
-[0-9]+
-   {  
-      return Parser.CONSTANT;
-   }
+["xyz"]         { return Parser.ID; }
+[0-9]+          { return Parser.CONSTANT; }
+["+-"]          { return Parser.OP_ADD_SUB; }
+["*/"]          { return Parser.OP_MUL_DIV; }
 
-\r|\n|\r\n
-  { // lleva la cuenta de lineas
+\r|\n|\r\n      /** Conteo de líneas **/
+  { 
     yyline++ ;
   }
 
-[+\-*/><=(){}!] {
-      /** Deja pasar los caracteres únicos como literales **/
-      /** No es ninguna expresión regular, sólo los caracteres literales **/
+[><(){}:]     /** Símbolos literales **/ 
+    { 
       yyparser.yylval = yytext();
       return yytext().charAt(0);
     }
 
-[ \t\ ]+ {  /** accion vacia: se ignoran los espacios en blanco y tabuladores **/
-       }
+[ \t\ ]+      /** Accion vacia: se ignoran los espacios en blanco y tabuladores **/
+      { }

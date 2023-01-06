@@ -1,8 +1,20 @@
+
 begin
 x=0
 y=5
 for(x to y)
     {
+        for(x to y) {
+            x=x+y
+        }
+        
         z=x+y*2
+    }
+if(x==2)    
+    { 
+        while(y=3)
+        {
+            z=z*2   
+        }        
     }
 end

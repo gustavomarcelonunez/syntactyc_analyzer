@@ -36,7 +36,6 @@ statement_list
 
 statement
   : assignment
-  | expression
   | while
   | if
   | switch
